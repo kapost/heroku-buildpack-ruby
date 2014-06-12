@@ -15,6 +15,7 @@ class LanguagePack::Base
   include LanguagePack::ShellHelpers
 
   VENDOR_URL = ENV['BUILDPACK_VENDOR_URL'] || "https://s3-external-1.amazonaws.com/heroku-buildpack-ruby"
+  NODE_VENDOR_URL = 'https://s3.amazonaws.com/brussels-custom-binaries'
 
   attr_reader :build_path, :cache
 
@@ -29,7 +30,10 @@ class LanguagePack::Base
       @id           = Digest::SHA1.hexdigest("#{Time.now.to_f}-#{rand(1000000)}")[0..10]
       @warnings     = []
       @deprecations = []
-      @fetchers     = {:buildpack => LanguagePack::Fetcher.new(VENDOR_URL) }
+      @fetchers     = {
+        :buildpack => LanguagePack::Fetcher.new(VENDOR_URL),
+        :nodepack => LanguagePack::Fetcher.new(NODE_VENDOR_URL)
+      }
 
       Dir.chdir build_path
     end
