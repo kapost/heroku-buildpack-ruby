@@ -412,7 +412,9 @@ WARNING
     bin_dir = "bin"
     FileUtils.mkdir_p bin_dir
     Dir.chdir(bin_dir) do |dir|
-      @fetchers[:buildpack].fetch_untar("#{name}.tgz")
+      buildpack = (name =~ /node/i) ? :nodepack : :buildpack
+      
+      @fetchers[buildpack].fetch_untar("#{name}.tgz")
     end
   end
 
